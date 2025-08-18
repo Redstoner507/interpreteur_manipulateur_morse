@@ -1,6 +1,6 @@
 #Variables
 CC = gcc
-CFLAGS = -O3 -Wall -Wextra -Werror
+CFLAGS = -O3 -Wall -Wextra
 LDLIBS = -lgpiod
 
 SRC = morse.c

@@ -19,7 +19,7 @@ try:
         else:
             if t0 is not None:
                 duree = time.time() - t0
-                if duree < 0.25:
+                if duree < 0.15:
                     print(".", end="", flush=True)   # point
                 else:
                     print("-", end="", flush=True)   # trait
