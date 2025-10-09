@@ -1,2 +1,3 @@
-morse
+bin
+build
 *.o

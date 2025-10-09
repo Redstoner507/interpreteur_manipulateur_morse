@@ -1,4 +1,5 @@
 #include "morse.h"
+#include <gpiod.h>
 
 int main(void) {
 	struct gpiod_chip *chip;

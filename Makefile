@@ -1,15 +1,27 @@
-#Variables
 CC = gcc
-CFLAGS = -O3 -Wall -Wextra
+CFLAGS = -Wall -Wextra -Iinclude
 LDLIBS = -lgpiod
 
-SRC = morse.c
-OBJ = $(SRC:.c=.o)
+SRC := $(wildcard src/*.c)
+OBJ := $(SRC:src/%.c=build/%.o)
+BIN := bin/main
 
-all: morse
+.PHONY: all clean dirs run
 
-morse: $(OBJ)
+all: dirs $(BIN)
+
+dirs:
+	mkdir -p build bin
+
+$(BIN): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
+build/%.o: src/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+run: all
+	clear
+	./$(BIN) $(ARGS)
+
 clean:
-	rm -f morse
+	rm -rf build/* bin/*
