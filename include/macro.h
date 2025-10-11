@@ -4,13 +4,13 @@
 #define CHK0(op) do { \
     if((op) != 0) { \
         perror(#op); \
-        exit(EXIT_FAILURE); \
+        return -1; \
     } \
 } while(0)
 
 #define CHKNULL(op) do { \
     if((op) == NULL) { \
         perror(#op); \
-        exit(EXIT_FAILURE); \
+        return -1; \
     } \
 } while(0)
