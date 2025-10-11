@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Iinclude
+CFLAGS = -Wall -Wextra -Werror -Iinclude
 LDLIBS = -lgpiod
 
 SRC := $(wildcard src/*.c)
