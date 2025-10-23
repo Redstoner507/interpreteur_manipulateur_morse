@@ -14,3 +14,10 @@
         return -1; \
     } \
 } while(0)
+
+#define CHKERR(op) do { \
+    if((op) == -1) { \
+        perror(#op); \
+        return EXIT_FAILURE; \
+    } \
+} while(0)

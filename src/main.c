@@ -6,6 +6,8 @@
 #include <signal.h>
 #include <unistd.h>
 #include <time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 char stop = 0;
 
@@ -20,6 +22,22 @@ double now_ms(void) {
 }
 
 int main(void) {
+	int pipefd[2];
+
+	CHKERR(pipe(pipefd));
+
+	pid_t pid = fork();
+
+	CHKERR(pid);
+
+	if (pid == 0) { // Création d'un fils qui va géré les singaux alternatifs
+		close(pipefd[1]); // ferme l'écriture
+
+		close(pipefd[0]); // ferme le lecteur
+		exit(EXIT_SUCCESS);
+	}
+
+	close(pipefd[0]); // ferme le lecteur
 
 	GPIO gpio;
 
@@ -68,7 +86,9 @@ int main(void) {
 		nanosleep(&ts, NULL); // Sleep pour temporiser la boucle
 	}
 	
+	close(pipefd[1]); // ferme l'écriture
 	gpio_close(&gpio); // Libère les GPIOs ouverts
+	wait(NULL); //Attend le fils
 
 	printf("Fin du programme");
 
