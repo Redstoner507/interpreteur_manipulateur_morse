@@ -2,6 +2,7 @@
 
 #include "gpio.h"
 #include "macro.h"
+#include "interprete.h"
 
 #include <signal.h>
 #include <unistd.h>
@@ -33,6 +34,8 @@ int main(void) {
 	if (pid == 0) { // Création d'un fils qui va géré les singaux alternatifs
 		close(pipefd[1]); // ferme l'écriture
 
+		CHKERR(boucleLecture(pipefd[0]));
+
 		close(pipefd[0]); // ferme le lecteur
 		exit(EXIT_SUCCESS);
 	}
@@ -60,6 +63,7 @@ int main(void) {
 	int value;
 	double start_time = 0.0;
 	struct timespec ts = {0, 100000000}; // 0s + 100ms
+	double duration, current_time;
 
 	while (!stop) {
 		value = gpiod_line_get_value(gpio.line); //Récupère la valeur de la ligne
@@ -70,13 +74,14 @@ int main(void) {
     	}
 
 		if (value != last_value) { // Détecte un changement d'état
-			double current_time = now_ms(); // récupère le temps en ms
+			current_time = now_ms(); // récupère le temps en ms
 
-			double duration = current_time - start_time; // Durée d'un état
+			duration = current_time - start_time; // Durée d'un état
 
 			//Affichage de l'état
             printf("État %d -> %d, durée = %.3f ms\n",
                 last_value, value, duration);
+			write(pipefd[1],&duration,sizeof(duration));
 			
 			// MAJ des variables
             start_time = current_time; 
