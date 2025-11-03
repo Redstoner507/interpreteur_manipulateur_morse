@@ -4,6 +4,7 @@
 
 #define CHIPNAME "/dev/gpiochip0"
 #define LINE_NUM 21
+#define CONSUMER "interprete"
 
 typedef struct {
     struct gpiod_chip *chip;

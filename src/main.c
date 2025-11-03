@@ -57,13 +57,19 @@ int main(void) {
 	if (gpio_open(&gpio) == -1) // Ouvre les GPIOs pour la lecture
 		return EXIT_FAILURE; 
 
-	printf("L'interprète écoute ! Ctrl+C pour stop");
 
 	int last_value = -1;
 	int value;
+
 	double start_time = 0.0;
+
 	struct timespec ts = {0, 100000000}; // 0s + 100ms
+
 	double duration, current_time;
+	
+	singalRecu signal;
+
+	printf("L'interprète écoute ! Ctrl+C pour stop\n");
 
 	while (!stop) {
 		value = gpiod_line_get_value(gpio.line); //Récupère la valeur de la ligne
@@ -81,7 +87,11 @@ int main(void) {
 			//Affichage de l'état
             printf("État %d -> %d, durée = %.3f ms\n",
                 last_value, value, duration);
-			write(pipefd[1],&duration,sizeof(duration));
+
+			signal.hauteurSignal = value;
+			signal.dureeSignal = duration;
+
+			write(pipefd[1],&signal,sizeof(signal));
 			
 			// MAJ des variables
             start_time = current_time; 
@@ -95,7 +105,7 @@ int main(void) {
 	gpio_close(&gpio); // Libère les GPIOs ouverts
 	wait(NULL); //Attend le fils
 
-	printf("Fin du programme");
+	printf("Fin du programme\n");
 
 	return EXIT_SUCCESS;
 }

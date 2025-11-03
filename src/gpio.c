@@ -6,6 +6,10 @@ int gpio_open(GPIO *gpio) {
 	// Obtenir la ligne GPIO
 	CHKNULL(gpio->line = gpiod_chip_get_line(gpio->chip,LINE_NUM));
 
+    CHK0(gpiod_line_request_input(gpio->line, CONSUMER));
+
+    printf("GPIO ouvert : %s ligne %d (lecture)\n", CHIPNAME, LINE_NUM);
+
     return 0;
 }
 
@@ -14,4 +18,5 @@ void gpio_close(GPIO *gpio){
         gpiod_line_release(gpio->line);
     if (gpio->chip)
         gpiod_chip_close(gpio->chip);
+    printf("GPIO libéré : %s ligne %d\n", CHIPNAME, LINE_NUM);
 }
