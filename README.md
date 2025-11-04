@@ -10,7 +10,7 @@ Le projet contient le firmware en C (utilisant gpiod) pour lire un interrupteur 
 
 - Affiche le temps en ms entre les changements d'état (ouvert/fermé).
 
-### Programme de test
+### Programme de test
 
 - Permet d'essayer le hardware.
 - Reconnais les signaux court et long et les affiches.
