@@ -3,7 +3,9 @@
 #include <ctype.h>
 #include <string.h>
 
-static const int TIME_UNIT = 60;
+static const double TIME_UNIT = 60;
+static const double DOT = TIME_UNIT;
+static const double DASH = TIME_UNIT * 3;
 /*
 20 WPM -> une unité = 60ms
 Point = 60 ms -> u*1 (Court)

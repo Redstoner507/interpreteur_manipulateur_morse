@@ -1,4 +1,5 @@
 #include "interprete.h"
+#include <math.h>
 
 int interpretSignalStream(int fd) {
     
@@ -10,7 +11,13 @@ int interpretSignalStream(int fd) {
     {
         if (signal.height)
         {
-            
+            if (isDot(signal.duration)) {
+                printf(".");
+            }
+            else if (isDash(signal.duration))
+            {
+                printf("-");
+            }
         }
     }
 
@@ -34,4 +41,13 @@ char morseToChar(const char * morseCode)
         }
     }
     return 0;
+}
+
+bool isDot(double duration_ms)
+{
+    return fabs(duration_ms - DOT) <= 10;
+}
+
+bool isDash(double duration_ms) {
+    return fabs(duration_ms - DASH) <= 10;
 }
