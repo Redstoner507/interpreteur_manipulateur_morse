@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 
-static const int UNITE_TEMPS = 60;
+static const int TIME_UNIT = 60;
 /*
 20 WPM -> une unité = 60ms
 Point = 60 ms -> u*1 (Court)
@@ -32,5 +32,4 @@ static const MorseEntry morseTable[] = {
     {'"', ".-..-."}, {'$', "...-..-"}, {'@', ".--.-."}
 };
 
-static const int NB_CARACTERES = sizeof(morseTable)/sizeof(MorseEntry);
-
+static const size_t CARACTERES_COUNT = sizeof(morseTable)/sizeof(MorseEntry);

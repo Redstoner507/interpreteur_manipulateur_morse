@@ -10,10 +10,10 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-char stop = 0;
+char running = 0;
 
 void fstop(int sigrecu) {
-    stop = 1;
+    running = 1;
 }
 
 double now_ms(void) {
@@ -34,7 +34,7 @@ int main(void) {
 	if (pid == 0) { // Création d'un fils qui va géré les singaux alternatifs
 		close(pipefd[1]); // ferme l'écriture
 
-		CHKERR(boucleLecture(pipefd[0]));
+		CHKERR(interpretSignalStream(pipefd[0]));
 
 		close(pipefd[0]); // ferme le lecteur
 		exit(EXIT_SUCCESS);
@@ -67,16 +67,16 @@ int main(void) {
 
 	double duration, current_time;
 	
-	singalRecu signal;
+	Signal signal;
 
 	printf("L'interprète écoute ! Ctrl+C pour stop\n");
 
-	while (!stop) {
+	while (!running) {
 		value = gpiod_line_get_value(gpio.line); //Récupère la valeur de la ligne
 
 		if (value < 0) {	// Vérification d'erreur
         	perror("gpiod_line_get_value");
-        	stop = 1;
+        	running = 1;
     	}
 
 		if (value != last_value) { // Détecte un changement d'état
@@ -88,8 +88,8 @@ int main(void) {
             printf("État %d -> %d, durée = %.3f ms\n",
                 last_value, value, duration);
 
-			signal.hauteurSignal = value;
-			signal.dureeSignal = duration;
+			signal.height= value;
+			signal.duration = duration;
 
 			write(pipefd[1],&signal,sizeof(signal));
 			

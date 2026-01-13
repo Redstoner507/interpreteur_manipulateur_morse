@@ -3,8 +3,10 @@
 #include <unistd.h>
 
 typedef struct {
-    int hauteurSignal;
-    double dureeSignal;
-} singalRecu;
+    char height;
+    double duration;
+} Signal;
 
-int boucleLecture(int fd);
+int interpretSignalStream(int fd);
+
+char morseToChar(const char * morseCode);
