@@ -10,10 +10,10 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-char running = 0;
+char running = 1;
 
 void fstop(int sigrecu) {
-    running = 1;
+    running = 0;
 }
 
 double now_ms(void) {
@@ -71,12 +71,13 @@ int main(void) {
 
 	printf("L'interprète écoute ! Ctrl+C pour stop\n");
 
-	while (!running) {
+	while (running) {
 		value = gpiod_line_get_value(gpio.line); //Récupère la valeur de la ligne
 
 		if (value < 0) {	// Vérification d'erreur
         	perror("gpiod_line_get_value");
-        	running = 1;
+        	running = 0;
+			continue;
     	}
 
 		if (value != last_value) { // Détecte un changement d'état
