@@ -11,7 +11,4 @@ typedef struct {
 int interpretSignalStream(int fd);
 
 char morseToChar(const char * morseCode);
-
-bool isDot(double duration_ms);
-
-bool isDash(double duration_ms);
+static inline bool isDuration(double duration, double target);

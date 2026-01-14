@@ -9,19 +9,34 @@ int interpretSignalStream(int fd) {
 
     while ((n = read(fd, &signal, sizeof(Signal))) > 0)
     {
-        if (signal.height)
+        if (signal.height) // Circuit fermé -> Point et trait
         {
-            if (isDot(signal.duration)) {
+            if (isDuration(signal.duration,DOT)) 
                 printf(".");
-            }
-            else if (isDash(signal.duration))
-            {
+
+            else if (isDuration(signal.duration,DASH))
                 printf("-");
+        }
+        else { // Circuit Ouvert -> Séparation
+            if (isDuration(signal.duration,SYMBOLE_SPACE))
+            {
+                
+            }
+            else if (isDuration(signal.duration,LETTER_SPACE))
+            {
+                printf(" ");
+            }
+            else 
+            {
+                printf(" | ");
             }
         }
     }
 
-    if (n < 0) return -1;
+    if (n < 0) {
+        perror("read");
+        return -1;
+    }
       
     return 0;
 }
@@ -43,11 +58,7 @@ char morseToChar(const char * morseCode)
     return 0;
 }
 
-bool isDot(double duration_ms)
+static inline bool isDuration(double duration, double target)
 {
-    return fabs(duration_ms - DOT) <= 10;
-}
-
-bool isDash(double duration_ms) {
-    return fabs(duration_ms - DASH) <= 10;
+    return fabs(duration - target) <= TOLERENCE;
 }

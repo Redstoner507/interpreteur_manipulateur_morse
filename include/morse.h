@@ -3,9 +3,17 @@
 #include <ctype.h>
 #include <string.h>
 
-static const double TIME_UNIT = 60;
-static const double DOT = TIME_UNIT;
-static const double DASH = TIME_UNIT * 3;
+#define UNIT_MS(wpm) (1200.0 / (wpm)) // Unité pour X WPM
+
+static const double TIME_UNIT     = UNIT_MS(20);
+static const double DOT           = TIME_UNIT;
+static const double DASH          = TIME_UNIT * 3;
+static const double SYMBOLE_SPACE = TIME_UNIT;
+static const double LETTER_SPACE  = TIME_UNIT * 3;
+static const double WORD_SPACE    = TIME_UNIT * 7;
+
+static const double TOLERENCE     = 10;
+
 /*
 20 WPM -> une unité = 60ms
 Point = 60 ms -> u*1 (Court)
